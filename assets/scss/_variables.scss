@@ -1,0 +1,50 @@
+$white: #fff;
+$primary-A-100: #00b4a0;
+$primary-B-100: #141446;
+$primary-B-75: #323274;
+$primary-B-50: #436eb1;
+$primary-B-10: #e9e9f1;
+$primary-B-25: #98b5e1;
+$tertiary-B-100: #8ad279;
+$tertiary-E-100: #f09429;
+$secondary-F-100: #eb674c;
+$secondary-F-25-electric: #fabbae;
+$secondary-F-25-enedis: #c3e869;
+$grey-10: #fcfbf8;
+$grey-25: #eeecdc;
+$grey-75: #ccc9b4;
+$grey-100: #bfbb96;
+$grey-150: #848160;
+$primary-100-electric: #ec81a6;
+$primary-100-enedis: #1423dc;
+
+$mobility-100-electric: #ec81a6;
+$mobility-100-enedis: #93c90e;
+$mobility-75: #f89fbe;
+
+$header-gradient-electric: linear-gradient(180deg, #ec81a6 0%, #141446 100%);
+$header-gradient-enedis: linear-gradient(180deg, #1423dc 0%, #141446 100%);
+
+$primary-100: var(--primary-100);
+$header-gradient: var(--header-gradient);
+$mobility-100: var(--mobility-100);
+$secondary-F-25: var(--secondary-F-25);
+#app {
+  --primary-100: #{$primary-100-electric};
+  --header-gradient: #{$header-gradient-electric};
+  --mobility-100: #{$mobility-100-electric};
+  --secondary-F-25: #{$secondary-F-25-electric};
+}
+#index {
+  --primary-100: #ec81a6;
+  --header-gradient: linear-gradient(180deg, #ec81a6, #141446);
+  --mobility-100: #ec81a6;
+  --secondary-F-25: #fabbae;
+}
+
+#app.enedis {
+  --primary-100: #{$primary-100-enedis};
+  --header-gradient: #{$header-gradient-enedis};
+  --mobility-100: #{$mobility-100-enedis};
+  --secondary-F-25: #{$secondary-F-25-enedis};
+}

@@ -1,0 +1,89 @@
+[
+  {
+    "name": "gaz",
+    "path": "/gaz",
+    "component": "/Users/aondongu/MobiliteElectrique/pages/gaz.vue",
+    "chunkName": "pages/gaz",
+    "children": [
+      {
+        "name": "gaz-territoireType",
+        "path": ":territoireType?",
+        "component": "/Users/aondongu/MobiliteElectrique/pages/gaz/_territoireType.vue",
+        "chunkName": "pages/gaz/_territoireType",
+        "children": [
+          {
+            "path": ":locationSlug?",
+            "component": "/Users/aondongu/MobiliteElectrique/pages/gaz/_territoireType/_locationSlug.vue",
+            "chunkName": "pages/gaz/_territoireType/_locationSlug",
+            "children": [
+              {
+                "name": "gaz-territoireType-locationSlug",
+                "path": "",
+                "component": "/Users/aondongu/MobiliteElectrique/pages/gaz/_territoireType/_locationSlug/index.vue",
+                "chunkName": "pages/gaz/_territoireType/_locationSlug/index",
+                "_name": "_4dda58b4"
+              }
+            ],
+            "_name": "_f6c0ea1e"
+          }
+        ],
+        "_name": "_da5766be"
+      }
+    ],
+    "_name": "_8521df64"
+  },
+  {
+    "name": "index123",
+    "path": "/index123",
+    "component": "/Users/aondongu/MobiliteElectrique/pages/index123.vue",
+    "chunkName": "pages/index123",
+    "_name": "_0c7245a2"
+  },
+  {
+    "name": "test",
+    "path": "/test",
+    "component": "/Users/aondongu/MobiliteElectrique/pages/test.vue",
+    "chunkName": "pages/test",
+    "_name": "_0242fa14"
+  },
+  {
+    "name": "updater",
+    "path": "/updater",
+    "component": "/Users/aondongu/MobiliteElectrique/pages/updater.vue",
+    "chunkName": "pages/updater",
+    "_name": "_382feab7"
+  },
+  {
+    "name": "index",
+    "path": "/",
+    "component": "/Users/aondongu/MobiliteElectrique/pages/index.vue",
+    "chunkName": "pages/index",
+    "children": [
+      {
+        "name": "index-vehicules-electriques-et-hybrides-rechargeables-territoireType",
+        "path": "vehicules-electriques-et-hybrides-rechargeables/:territoireType?",
+        "component": "/Users/aondongu/MobiliteElectrique/pages/index/vehicules-electriques-et-hybrides-rechargeables/_territoireType.vue",
+        "chunkName": "pages/index/vehicules-electriques-et-hybrides-rechargeables/_territoireType",
+        "children": [
+          {
+            "path": ":locationSlug?",
+            "component": "/Users/aondongu/MobiliteElectrique/pages/index/vehicules-electriques-et-hybrides-rechargeables/_territoireType/_locationSlug.vue",
+            "chunkName": "pages/index/vehicules-electriques-et-hybrides-rechargeables/_territoireType/_locationSlug",
+            "children": [
+              {
+                "name": "index-vehicules-electriques-et-hybrides-rechargeables-territoireType-locationSlug",
+                "path": "",
+                "component": "/Users/aondongu/MobiliteElectrique/pages/index/vehicules-electriques-et-hybrides-rechargeables/_territoireType/_locationSlug/index.vue",
+                "chunkName": "pages/index/vehicules-electriques-et-hybrides-rechargeables/_territoireType/_locationSlug/index",
+                "_name": "_a626a24c"
+              }
+            ],
+            "_name": "_45c214d2"
+          }
+        ],
+        "_name": "_0f56b1c7"
+      }
+    ],
+    "_name": "_5ef203c0"
+  }
+]

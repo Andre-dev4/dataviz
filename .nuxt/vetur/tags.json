@@ -1,0 +1,53 @@
+{
+  "NuxtLogo": {
+    "description": "Auto imported from components/NuxtLogo.vue"
+  },
+  "Tutorial": {
+    "description": "Auto imported from components/Tutorial.vue"
+  },
+  "AppFooter": {
+    "description": "Auto imported from components/app-footer.vue"
+  },
+  "AppHeader": {
+    "description": "Auto imported from components/app-header.vue"
+  },
+  "BoxSelectPageHead": {
+    "description": "Auto imported from components/box-select-page-head.vue"
+  },
+  "HighchartsCompo": {
+    "description": "Auto imported from components/highcharts-compo.vue"
+  },
+  "MobileClassementReverse": {
+    "description": "Auto imported from components/mobile-classement-reverse.vue"
+  },
+  "MobileClassement": {
+    "description": "Auto imported from components/mobile-classement.vue"
+  },
+  "ModulePdcCount": {
+    "description": "Auto imported from components/module-pdc-count.vue"
+  },
+  "ModuleVehiculeCount": {
+    "description": "Auto imported from components/module-vehicule-count.vue"
+  },
+  "QuintilesGraph2axisReverse": {
+    "description": "Auto imported from components/quintiles-graph-2axis-reverse.vue"
+  },
+  "QuintilesGraph2axis": {
+    "description": "Auto imported from components/quintiles-graph-2axis.vue"
+  },
+  "QuintilesGraphReversepdc": {
+    "description": "Auto imported from components/quintiles-graph-reversepdc.vue"
+  },
+  "QuintilesGraph": {
+    "description": "Auto imported from components/quintiles-graph.vue"
+  },
+  "SelectorRadio": {
+    "description": "Auto imported from components/selector-radio.vue"
+  },
+  "SelectorSelectEpciCat": {
+    "description": "Auto imported from components/selector-select-epci-cat.vue"
+  },
+  "SelectorSelectLocation": {
+    "description": "Auto imported from components/selector-select-location.vue"
+  }
+}
