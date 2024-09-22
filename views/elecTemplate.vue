@@ -67,13 +67,11 @@
         </div>
         <div class="page-header-selectors" :class="{ 'no-mobile': $route.name === 'index' }">
           <div class="location-selector-box">
-            <box-select-page-head class="selector-electric" :reduced="$route.name !== 'index'"
-              :cat-vehic="'elec'"></box-select-page-head>
+            <box-select-page-head class="selector-electric" :reduced="$route.name !== 'index'" :cat-vehic="'elec'"></box-select-page-head>
           </div>
 
           <div v-if="($route.name === 'index') && !$store.state.versionEnedis" key="1" class="location-selector-box">
-            <box-select-page-head class="selector-electric" :reduced="$route.name !== 'index'"
-              :cat-vehic="'gaz'"></box-select-page-head>
+            <box-select-page-head class="selector-electric" :reduced="$route.name !== 'index'" :cat-vehic="'gaz'"></box-select-page-head>
           </div>
           <div v-else-if="$route.name !== 'index' && current_territoire" key="2" class="elec-data-box">
             <module-vehicule-count :count-datas="vehiculeCountDatas" :location-field="locationField"
@@ -81,16 +79,16 @@
             <module-pdc-count :count-datas="pdcCountDatas"></module-pdc-count>
           </div>
         </div>
-        <div v-if="$route.name === 'index'" class="page-header-selectors mobile-only" :data-carrousel-index="carrouselIndex">
-          <div class="selector-mobile-wrapper" v-touch:start="startHandler" v-touch:end="endHandler" v-touch:swipe.left="swipeHandlerLeft" v-touch:swipe.right="swipeHandlerRight">
+        <div v-if="$route.name === 'index'" class="page-header-selectors mobile-only"
+          :data-carrousel-index="carrouselIndex">
+          <div class="selector-mobile-wrapper" v-touch:start="startHandler" v-touch:end="endHandler"
+            v-touch:swipe.left="swipeHandlerLeft" v-touch:swipe.right="swipeHandlerRight">
             <div class="location-selector-box">
-              <box-select-page-head class="selector-electric" :reduced="$route.name !== 'index'"
-                :cat-vehic="'elec'" style="width: 100%;"></box-select-page-head>
+              <box-select-page-head class="selector-electric" :reduced="$route.name !== 'index'" :cat-vehic="'elec'"></box-select-page-head>
             </div>
 
             <div v-if="($route.name === 'index') && !$store.state.versionEnedis" key="1" class="location-selector-box">
-              <box-select-page-head class="selector-electric" :reduced="$route.name !== 'index'"
-                :cat-vehic="'gaz'" style="width: 100%;"></box-select-page-head>
+              <box-select-page-head class="selector-electric" :reduced="$route.name !== 'index'" :cat-vehic="'gaz'"></box-select-page-head>
             </div>
             <div v-else-if="$route.name !== 'index' && current_territoire" key="2" class="elec-data-box">
               <module-vehicule-count :count-datas="vehiculeCountDatas" :location-field="locationField"
@@ -374,7 +372,7 @@ export default {
     }
   },
   async fetch() {
-    console.log('TOTO')
+    console.log('async fetch --> ANDRE')
     await this.updateDatas()
     if (this.$route.name !== 'index') this.loadingState = 'loaded'
   },
@@ -454,18 +452,43 @@ export default {
       if (this.currCatVehic === 'gaz') return dataEntry.c_total_gnv
       return dataEntry['c_' + _self.current_type_vehicule.id]
     },
+    pdcCountDatasV0() {
+      const _self = this
+      if ((_self.currCatVehic === 'gaz') && _self.current_territoire) {
+        return _self.current_territoire.stations_gnv_reg
+      }
+      console.log('ANDRE-->_self.inLocationDatas22', JSON.stringify(_self.inLocationDatas));
+      const sumPDC = _.sum(
+        _.map(_.groupBy(_self.inLocationDatas, 'code_epci'), function (fEntry) {
+          return _self.current_type_territoire.id === 'regions' ? fEntry[0].pdc_reg : (_self.current_type_territoire.id === 'departements' ? fEntry[0].pdc_dep : fEntry[0].pdc_epci)
+        })
+      )
+      return sumPDC
+    },
     pdcCountDatas() {
       const _self = this
       if ((_self.currCatVehic === 'gaz') && _self.current_territoire) {
         return _self.current_territoire.stations_gnv_reg
       }
-      const sumPDC = _.sum(
-        _.map(_.groupBy(_self.inLocationDatas, 'code_epci'), function (fEntry) {
-          return fEntry[0].pdc_epci
-        })
-      )
 
-      return sumPDC
+      console.log('ANDRE-->_self.inLocationDatas', JSON.stringify(_self.inLocationDatas));
+
+      const checkDataUnicityReg = _self.inLocationDatas ?  _self.inLocationDatas.every((val) => val.pdc_reg === _self.inLocationDatas[0].pdc_reg) : false;
+      const checkDataUnicityDep = _self.inLocationDatas ?  _self.inLocationDatas.every((val) => val.pdc_reg === _self.inLocationDatas[0].pdc_reg) : false;
+      const checkDataUnicityEpci = _self.inLocationDatas ?  _self.inLocationDatas.every((val) => val.pdc_reg === _self.inLocationDatas[0].pdc_reg) : false;
+
+      if(!checkDataUnicityReg || !checkDataUnicityDep || !checkDataUnicityEpci) {
+
+        console.error('Error: Les données de PDC ne sont pas uniques pour le territoire courant');
+      }
+
+      console.log('ANDRE-->checkDataUnicityReg', checkDataUnicityReg);
+      console.log('ANDRE-->checkDataUnicityDep', checkDataUnicityDep);
+      console.log('ANDRE-->checkDataUnicityEpci', checkDataUnicityEpci);
+
+      console.log('ANDRE-->_self.current_type_territoire.id', _self.current_type_territoire.id);
+
+      return _self.current_type_territoire.id === 'regions' && _self.inLocationDatas ? _self.inLocationDatas[0].pdc_reg : (_self.current_type_territoire.id === 'departements' && _self.inLocationDatas ? _self.inLocationDatas[0].pdc_dep : (_self.current_type_territoire.id === 'epci' && _self.inLocationDatas ? _self.inLocationDatas[0].pdc_epci : 0))
     },
     percVehic() {
       // const _self = this
@@ -524,13 +547,18 @@ export default {
       if (this.$store.state.versionEnedis) return
       // console.log('swipe L')
       this.touching = false
-      this.carrouselIndex = 1
+      //this.carrouselIndex = 1
+      this.setCarrouselIndex(this.carrouselIndex === 0 ? 1 : 0);
     },
     swipeHandlerRight() {
       if (this.$store.state.versionEnedis) return
       // console.log('swipe R')
       this.touching = false
-      this.carrouselIndex = 0
+      //this.carrouselIndex = 0
+      this.setCarrouselIndex(this.carrouselIndex === 1 ? 0 : 1);
+    },
+    setCarrouselIndex(index) {
+      this.carrouselIndex = index;
     },
     async updateDatas() {
       if (!this.current_territoire) return
@@ -576,12 +604,17 @@ export default {
       if (this.currCatVehic === 'gaz') {
         reqGraph += '&y.c_total_gnv.func=SUM&y.c_total_gnv.expr=total_gnv'
       }
+      console.log('ANDRE-->reqGraph', reqGraph);
       // console.log('reqGraph', reqGraph)
       const graphDatas = await axios
         .get(getODSRequest(reqGraph, 'analyze'))
         .then((response) => {
           // if(process.browser) console.log('response.data', response.data)
+          console.log('ANDRE-->response', JSON.stringify(response));
+          
           return _.map(response.data, function (fEntry) {
+            console.log('ANDRE-->fEntry', JSON.stringify(fEntry));
+            console.log('ANDRE-->_self[_self.current_type_territoire.id]', JSON.stringify(_self[_self.current_type_territoire.id]));
             const territoireObject = _.find(
               _self[_self.current_type_territoire.id],
               function (fTerritory) {
@@ -761,24 +794,14 @@ export default {
 @import '~assets/scss/_variables.scss';
 @import '~assets/scss/_browsers.scss';
 
-
 .location-selector-box {
   display: flex;
   flex-basis: 480px;
 }
 
-
 .page-header-wrapper {
   position: relative;
   z-index: 2;
-}
-
-.page {
-  --primary-100: #ec81a6;
-  --header-gradient: linear-gradient(180deg, #ec81a6, #141446);
-  --mobility-100: #ec81a6;
-  --secondary-F-25: #fabbae;
-
 }
 
 .page-header {
@@ -865,16 +888,6 @@ export default {
     padding: 0px;
     gap: 20px;
   }
-}
-
-.page-header {
-  position: relative;
-  background-color: var(--primary-100);
-  padding-top: 55px;
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 16px 20px rgba(144, 149, 162, .3);
 }
 
 .page-content {
@@ -2070,277 +2083,39 @@ export default {
 }
 
 
+//////////////////////: ANDRE ///////////////////
+.page-header-selectors {
+  &.mobile-only {
+    display: block;
+    overflow: hidden;
 
+    .selector-mobile-wrapper {
+      display: flex;
+      transition: transform 0.3s ease-out;
+    }
 
-
-#app[data-v-fb180d12] {
-  --primary-100: #ec81a6;
-  --header-gradient: linear-gradient(180deg, #ec81a6, #141446);
-  --mobility-100: #ec81a6;
-  --secondary-F-25: #fabbae
-}
-
-#app.enedis[data-v-fb180d12] {
-  --primary-100: #1423dc;
-  --header-gradient: linear-gradient(180deg, #1423dc, #141446);
-  --mobility-100: #93c90e;
-  --secondary-F-25: #c3e869
-}
-
-.info-boxes[data-v-fb180d12] {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  padding: 0;
-  grid-gap: 35px;
-  gap: 35px;
-  margin-top: 6px;
-  box-sizing: border-box
-}
-
-.info-box[data-v-fb180d12] {
-  flex: 50%;
-  transition-property: all;
-  transition-duration: .3s;
-  transition-timing-function: ease-out;
-  transition-delay: 0s;
-  background: #00b4a0;
-  border: 2px solid #141446;
-  border-radius: 10px
-}
-
-.info-box.legend .info-box-content[data-v-fb180d12] {
-  padding: 0
-}
-
-.info-box.legend .info-box-content img[data-v-fb180d12] {
-  max-width: 506px;
-  width: 100%
-}
-
-.info-box .info-box-content[data-v-fb180d12] {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-start;
-  padding: 16px 20px;
-  grid-gap: 8px;
-  gap: 8px
-}
-
-.info-box .result[data-v-fb180d12] {
-  background-color: #fff;
-  padding: 0 4px
-}
-
-.info-box:not(.first)[data-quintile="1"][data-v-fb180d12] {
-  background-color: #436eb1 !important;
-  border-color: #436eb1 !important;
-  color: #fff
-}
-
-.info-box:not(.first)[data-quintile="1"] .desc .result[data-v-fb180d12] {
-  color: #141446
-}
-
-.info-box:not(.first)[data-quintile="2"][data-v-fb180d12] {
-  background-color: #00b4a0 !important;
-  border-color: #00b4a0 !important
-}
-
-.info-box:not(.first)[data-quintile="3"][data-v-fb180d12] {
-  background-color: #8ad279 !important;
-  border-color: #8ad279 !important
-}
-
-.info-box:not(.first)[data-quintile="4"][data-v-fb180d12] {
-  background-color: #f09429 !important;
-  border-color: #f09429 !important
-}
-
-.info-box:not(.first)[data-quintile="5"][data-v-fb180d12] {
-  background-color: #eb674c !important;
-  border-color: #eb674c !important
-}
-
-.info-box.first[data-v-fb180d12] {
-  background-color: #e9e9f1;
-  border: 2px solid #e9e9f1
-}
-
-.info-box.first .result[data-v-fb180d12] {
-  background-color: #141446;
-  color: #fff
-}
-
-.info-box .ranking[data-v-fb180d12] {
-  font-weight: 600;
-  font-size: 12px;
-  line-height: 15px
-}
-
-.info-box .name[data-v-fb180d12] {
-  font-weight: 800;
-  font-size: 16px;
-  line-height: 15px
-}
-
-.info-box .desc[data-v-fb180d12] {
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 120%
-}
-
-@media screen and (max-width:639px) {
-  .info-boxes[data-v-fb180d12] {
-    grid-gap: 20px;
-    gap: 20px
-  }
-
-  .info-box .name[data-v-fb180d12] {
-    font-size: 16px;
-    line-height: 120%
-  }
-
-  .info-box.current.tooltip .result.res1[data-v-fb180d12],
-  .info-box.current.tooltip .result.res2[data-v-fb180d12],
-  .info-box .desc[data-v-fb180d12],
-  .info-box .desc .result[data-v-fb180d12] {
-    font-size: 12px;
-    line-height: 15px
+    .location-selector-box {
+      width: 100%;
+      padding: 0 15px;
+      box-sizing: border-box;
+    }
   }
 }
 
-.fade-enter-active[data-v-fb180d12],
-.fade-leave-active[data-v-fb180d12] {
-  transition: all .5s ease
-}
-
-.fade-enter-from[data-v-fb180d12],
-.fade-leave-to[data-v-fb180d12] {
-  opacity: 0
-}
-
-.desc .volume-data[data-v-fb180d12] {
-  margin-top: 8px;
-  display: block;
-  font-size: 16px;
-  font-style: italic;
-  font-weight: 600;
-  line-height: 120%
-}
-
-.wrapper[data-v-fb180d12],
-[data-v-fb180d12] .commonGraph {
-  overflow: visible !important;
-  overflow: initial !important
-}
-
-.graph[data-v-fb180d12] {
-  position: relative;
-  display: block
-}
-
-.graph[data-v-fb180d12] .highcharts-container {
-  overflow: visible !important;
-  overflow: initial !important
-}
-
-.graph[data-v-fb180d12] .col-rd-current {
-  position: relative;
-  width: 16px;
-  height: 0
-}
-
-.graph[data-v-fb180d12] .col-rd-current:after {
-  position: absolute;
-  content: "";
-  width: 0;
-  height: 0;
-  border-color: #141446 transparent transparent;
-  border-style: solid;
-  border-width: 10px 8px 0;
-  z-index: 999
-}
-
-.graph[data-v-fb180d12] .highcharts-axis-labels.highcharts-yaxis-labels span {
-  background-color: #fff;
-  padding-right: 6px
-}
-
-.graph .graph-background[data-v-fb180d12] {
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  position: absolute;
+.carrousel-controls {
   display: flex;
-  z-index: -1;
-  align-items: center;
-  justify-content: center
-}
+  justify-content: center;
+  margin-top: 10px;
 
-.graph .graph-background img[data-v-fb180d12] {
-  max-width: 941px
-}
-
-.graph[data-cat=pdc][data-v-fb180d12] .highcharts-tick,
-.graph[data-cat=vehic][data-v-fb180d12] .highcharts-tick {
-  display: none
-}
-
-.graph[data-cat=pdc] .graph-background img[data-v-fb180d12] {
-  max-width: 860px
-}
-
-.graph[data-cat=mapping] .graph-container[data-v-fb180d12] {
-  max-width: 768px;
-  position: relative;
-  margin: auto
-}
-
-.graph[data-cat=mapping] .graph-background[data-v-fb180d12] {
-  max-width: 768px;
-  position: absolute;
-  margin: auto;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%)
-}
-
-.graph[data-cat=mapping] .graph-background img[data-v-fb180d12] {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0
-}
-
-.graph[data-cat=mapping][data-v-fb180d12] .commonGraph {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0
-}
-
-.graph .chart-container[data-v-fb180d12] {
-  position: relative
-}
-
-.ranking-type[data-v-fb180d12] {
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: right;
-  text-align: right;
-  letter-spacing: .1em
-}
-
-@media screen and (max-width:1040px) {
-  .graph .graph-background img[data-v-fb180d12] {
-    max-width: 95%
+  .carrousel-controls-item {
+    width: 8px;
+    height: 8px;
+    margin: 0 4px;
+    border-radius: 50%;
+    background: #c3c3c3;
+    &.current {
+      background: #000;
+    }
   }
-}</style>
+}
+</style>
