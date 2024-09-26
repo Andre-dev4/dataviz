@@ -372,7 +372,6 @@ export default {
     }
   },
   async fetch() {
-    console.log('async fetch --> ANDRE')
     await this.updateDatas()
     if (this.$route.name !== 'index') this.loadingState = 'loaded'
   },
@@ -457,7 +456,6 @@ export default {
       if ((_self.currCatVehic === 'gaz') && _self.current_territoire) {
         return _self.current_territoire.stations_gnv_reg
       }
-      console.log('ANDRE-->_self.inLocationDatas22', JSON.stringify(_self.inLocationDatas));
       const sumPDC = _.sum(
         _.map(_.groupBy(_self.inLocationDatas, 'code_epci'), function (fEntry) {
           return _self.current_type_territoire.id === 'regions' ? fEntry[0].pdc_reg : (_self.current_type_territoire.id === 'departements' ? fEntry[0].pdc_dep : fEntry[0].pdc_epci)
@@ -465,13 +463,11 @@ export default {
       )
       return sumPDC
     },
-    pdcCountDatas() {
+    pdcCountDatas(){
       const _self = this
       if ((_self.currCatVehic === 'gaz') && _self.current_territoire) {
         return _self.current_territoire.stations_gnv_reg
-      }
-
-      console.log('ANDRE-->_self.inLocationDatas', JSON.stringify(_self.inLocationDatas));
+    }
 
       const checkDataUnicityReg = _self.inLocationDatas ?  _self.inLocationDatas.every((val) => val.pdc_reg === _self.inLocationDatas[0].pdc_reg) : false;
       const checkDataUnicityDep = _self.inLocationDatas ?  _self.inLocationDatas.every((val) => val.pdc_reg === _self.inLocationDatas[0].pdc_reg) : false;
@@ -482,13 +478,7 @@ export default {
         console.error('Error: Les données de PDC ne sont pas uniques pour le territoire courant');
       }
 
-      console.log('ANDRE-->checkDataUnicityReg', checkDataUnicityReg);
-      console.log('ANDRE-->checkDataUnicityDep', checkDataUnicityDep);
-      console.log('ANDRE-->checkDataUnicityEpci', checkDataUnicityEpci);
-
-      console.log('ANDRE-->_self.current_type_territoire.id', _self.current_type_territoire.id);
-
-      return _self.current_type_territoire.id === 'regions' && _self.inLocationDatas ? _self.inLocationDatas[0].pdc_reg : (_self.current_type_territoire.id === 'departements' && _self.inLocationDatas ? _self.inLocationDatas[0].pdc_dep : (_self.current_type_territoire.id === 'epci' && _self.inLocationDatas ? _self.inLocationDatas[0].pdc_epci : 0))
+      return _self.current_type_territoire.id === 'regions' && _self.inLocationDatas ? _self.inLocationDatas[4].pdc_reg : (_self.current_type_territoire.id === 'departements' && _self.inLocationDatas ? _self.inLocationDatas[0].pdc_dep : (_self.current_type_territoire.id === 'epci' && _self.inLocationDatas ? _self.inLocationDatas[0].pdc_epci : 0))
     },
     percVehic() {
       // const _self = this
@@ -561,8 +551,11 @@ export default {
       this.carrouselIndex = index;
     },
     async updateDatas() {
+
+      //console.log('this.locationField', this.locationField, 'this.current_territoire.code', this.current_territoire.code)
+
       if (!this.current_territoire) return
-      console.log('this.locationField', this.locationField, 'this.current_territoire.code', this.current_territoire.code)
+      
       const _self = this
       const req =
         '&q=' +
@@ -570,13 +563,13 @@ export default {
         '=' +
         this.current_territoire.code +
         '&rows=-1'
-      console.log('inLocationDatas', getODSRequest(req))
+      //console.log('inLocationDatas', getODSRequest(req))
       const inLocationDatas = await axios
         .get(getODSRequest(req))
         .then((response) => {
           return _.map(response.data.records, 'fields')
         })
-      console.log('req', req)
+      //console.log('req', req)
       this.inLocationDatas = inLocationDatas
 
       let reqGraph = '&x=' + this.locationField.replace('code_', 'libelle_')
@@ -604,61 +597,71 @@ export default {
       if (this.currCatVehic === 'gaz') {
         reqGraph += '&y.c_total_gnv.func=SUM&y.c_total_gnv.expr=total_gnv'
       }
-      console.log('ANDRE-->reqGraph', reqGraph);
       // console.log('reqGraph', reqGraph)
-      const graphDatas = await axios
-        .get(getODSRequest(reqGraph, 'analyze'))
-        .then((response) => {
-          // if(process.browser) console.log('response.data', response.data)
-          console.log('ANDRE-->response', JSON.stringify(response));
+      const graphDatas = await axios.get(getODSRequest(reqGraph, 'analyze')).then((response) => {
           
           return _.map(response.data, function (fEntry) {
-            console.log('ANDRE-->fEntry', JSON.stringify(fEntry));
-            console.log('ANDRE-->_self[_self.current_type_territoire.id]', JSON.stringify(_self[_self.current_type_territoire.id]));
-            const territoireObject = _.find(
-              _self[_self.current_type_territoire.id],
-              function (fTerritory) {
+
+            const territoireObject = _.find(_self[_self.current_type_territoire.id], function (fTerritory) {
+
                 return fTerritory.label === fEntry.x
-              }
-            )
-            if (!territoireObject)
-              console.log('territoireObject', territoireObject, fEntry.x)
-            let processedEPCI
-            if (territoireObject.type === 'epci') {
+            })
+            
+            if(!territoireObject){
+
+              //console.log('territoireObject', territoireObject, fEntry.x)
+            }
+              
+            let processedEPCI;
+
+            if(territoireObject.type === 'epci'){
+
               processedEPCI = _.filter(_self.epci, function (fEpci) {
-                if (territoireObject.type === 'reg') {
+
+                if(territoireObject.type === 'reg'){
+
                   return fEpci.code_reg === territoireObject.code
-                } else if (territoireObject.type === 'dpt') {
+
+                }else if(territoireObject.type === 'dpt'){
+
                   return fEpci.code_dpt === territoireObject.code
+                  
                 } else {
+                  
                   return fEpci.code === territoireObject.code
                 }
               })
             } else {
+
               processedEPCI = _.filter(_self.communes, function (fCommune) {
+
                 if (territoireObject.type === 'reg') {
+
                   return fCommune.code_reg === territoireObject.code
+
                 } else if (territoireObject.type === 'dpt') {
+
                   return fCommune.code_dpt === territoireObject.code
+
                 } else {
+
                   return fCommune.code_epci === territoireObject.code
                 }
               })
             }
 
+
             // let processedEPCI = filteredEpciByComm
-            if (
-              territoireObject.type === 'epci' &&
-              _self.current_epci_category.id === 'classe'
-            ) {
+            if(territoireObject.type === 'epci' && _self.current_epci_category.id === 'classe'){
+
               processedEPCI = _.uniqBy(processedEPCI, 'code_epci')
             }
             // console.log('processedEPCI', processedEPCI)
 
 
-            console.log('processedEPCI', territoireObject.label, territoireObject.code, processedEPCI, '>>sum_pdc>>', _.sumBy(_.uniqBy(processedEPCI, 'code_epci'), function (fEpci) {
+            /*console.log('processedEPCI', territoireObject.label, territoireObject.code, processedEPCI, '>>sum_pdc>>', _.sumBy(_.uniqBy(processedEPCI, 'code_epci'), function (fEpci) {
               return fEpci.pdc_epci
-            }))
+            }))*/
 
             /*
             console.log('filteredEpci', territoireObject.label, processedEPCI, territoireObject.label, _.sumBy(processedEPCI, function (fEpci) {
@@ -677,6 +680,7 @@ export default {
         })
 
       this.locationDatas = graphDatas
+
     },
     mobileLocationSelectExpandToggle() {
       this.mobileLocationSelectExpanded = !this.mobileLocationSelectExpanded
@@ -793,6 +797,13 @@ export default {
 <style lang="scss">
 @import '~assets/scss/_variables.scss';
 @import '~assets/scss/_browsers.scss';
+
+@media screen and (max-width: 639px) {
+  .page .page-header .page-header-selectors {
+    width: calc(200vw + 80px);
+  }
+}
+
 
 .location-selector-box {
   display: flex;
@@ -1417,7 +1428,10 @@ export default {
 }
 
 .location-selector-box {
-  // padding: 0px 40px;
+  //padding: 0 40px;
+  width: 100%;
+  //flex-basis: 100%;
+  max-width: none;
 }
 
 .statut-sticky {

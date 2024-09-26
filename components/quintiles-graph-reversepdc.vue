@@ -98,7 +98,7 @@
                 par <span v-if="currCatVehic === 'gaz'">station GNV</span
                 ><span v-else
                   >point de charge</span
-                ><span class="volume-data">soit {{graphDatas.currValueVol}} <span v-if="currCatVehic === 'gaz'">stations GNV</span
+                ><span class="volume-data">soit {{graphDatas.currValueVol}}<span v-if="currCatVehic === 'gaz'">stations GNV</span
                 ><span v-else
                   >points de charge</span> pour {{graphDatas.currValueNb}} <span v-if="currCatVehic === 'gaz'">véhicules au gaz</span
                 ><span v-else
@@ -349,7 +349,7 @@ export default {
       })
       return region
     },
-    graphDatas() {
+    graphDatas(){
       const _self = this
       if (!this.locationDatas) return null
       let processedDatas = this.locationDatas
@@ -453,7 +453,6 @@ export default {
           indic_autre: fEntry['c_' + _self.current_type_vehicule.idAutre]
         }
       })
-      // console.log('graphDatas>>', graphDatas)
       let current = _.find(graphDatas, function (fEntry) {
         return fEntry.code === _self.currentTerritoire.code
       })

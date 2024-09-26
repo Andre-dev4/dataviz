@@ -141,7 +141,6 @@ export default {
       const _self = this
       this.panelOpen = false
       const pathByType = this.currCatVehic === 'gaz' || this.catVehic === 'gaz' ? 'gaz-territoireType-locationSlug' : 'index-vehicules-electriques-et-hybrides-rechargeables-territoireType-locationSlug'
-      console.log('ANDRE-->selectItem', JSON.stringify({ name: pathByType, params: { territoireType: _self.slugify(_self.internalTypeTerritoire.label), locationSlug: _self.slugify(fItem.label), },}));
       this.$router.push({ name: pathByType, params: { territoireType: _self.slugify(_self.internalTypeTerritoire.label), locationSlug: _self.slugify(fItem.label), },})
     },
   },
