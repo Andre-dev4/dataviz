@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[32],{525:function(t,n,e){"use strict";e.r(n);var c={middleware:["updateDatas"]},l=e(61),component=Object(l.a)(c,(function(){return(0,this._self._c)("div",{staticClass:"page"},[this._v("\n  UPDATE DATAS\n")])}),[],!1,null,"f6c77758",null);n.default=component.exports}}]);

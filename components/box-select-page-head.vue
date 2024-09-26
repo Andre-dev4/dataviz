@@ -43,7 +43,7 @@
     ></selector-select-location>
     <div class="selector-legend">
       <span v-if="catVehic === 'elec' && currCatVehic !== 'gaz'"
-        >*Établissement public de coopération intercommunale</span
+        >*Établissement public de coopération intercommunale ANDRE</span
       >
       <span v-else>*Données disponibles uniquement au niveau régional</span>
     </div>
