@@ -26,7 +26,7 @@ console.log("TOTO")
   <div class="page">
       <!---<AppHeader />-->
       <elec-view />
-      <!--<AppFooter />-->
+      <AppFooter />
   </div>
 </template>
   

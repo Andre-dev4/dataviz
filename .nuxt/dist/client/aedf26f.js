@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[25],{532:function(n,t,l){"use strict";l.r(t);var c=l(61),component=Object(c.a)({},(function(){return(0,this._self._c)("div",{staticClass:"page"},[this._v("locslug")])}),[],!1,null,null,null);t.default=component.exports}}]);

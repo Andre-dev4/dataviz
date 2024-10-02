@@ -53,6 +53,7 @@
         <div class="logo-wdd">
           <a href="https://wedodata.fr/" target="_blank">
             <span v-html="require(`~/assets/_svg/logo-wedodata.svg?raw`)" />
+          <!--<img src="~/assets/_svg/logoomnilink2.png" alt="Logo Omnilink" />-->
           </a>
         </div>
       </div>
@@ -60,7 +61,9 @@
     <div class="logos-right mobile-only">
       <div class="logo-wdd">
         <a href="https://wedodata.fr/" target="_blank">
-          <span v-html="require(`~/assets/_svg/logo-wedodata.svg?raw`)" />
+          <!--<span v-html="require(`~/assets/_svg/logo-wedodata.svg?raw`)" />
+          <span v-html="require(`~/assets/_svg/logoomnilink.svg?raw`)" />
+          <img src="~/assets/_svg/logoomnilink.png" alt="Logo Omnilink" />-->
         </a>
       </div>
     </div>
