@@ -478,7 +478,7 @@ export default {
         console.error('Error: Les données de PDC ne sont pas uniques pour le territoire courant');
       }
 
-      return _self.current_type_territoire.id === 'regions' && _self.inLocationDatas ? _self.inLocationDatas[4].pdc_reg : (_self.current_type_territoire.id === 'departements' && _self.inLocationDatas ? _self.inLocationDatas[0].pdc_dep : (_self.current_type_territoire.id === 'epci' && _self.inLocationDatas ? _self.inLocationDatas[0].pdc_epci : 0))
+      return _self.current_type_territoire.id === 'regions' && _self.inLocationDatas ? _self.inLocationDatas[0].pdc_reg : (_self.current_type_territoire.id === 'departements' && _self.inLocationDatas ? _self.inLocationDatas[0].pdc_dep : (_self.current_type_territoire.id === 'epci' && _self.inLocationDatas ? _self.inLocationDatas[0].pdc_epci : 0))
     },
     percVehic() {
       // const _self = this
