@@ -1,9 +1,10 @@
 const ODS_ORE_SETTINGS = {
-  dataset:
+  datasetv0:
     'jdd-prive-vehicules-stations-electricite-gaz-par-territoires-classes',
   apiurl: 'https://opendata.agenceore.fr/',
   entrypoint: 'api/records/1.0/search',
   apiKey: '87683e64cdf02de7458bb5c1c5ab23259ca25affd3f95b9ca47f7e19',
+  dataset : 'jdd-prive-vehicules-et-stations-electricite-et-gaz-par-territoires-classes-copie'
 }
 
 const getODSRequest = function (fReq, fApiType = 'search') {

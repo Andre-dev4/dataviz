@@ -12,9 +12,9 @@ console.log("TOTO")
 
 <template>
     <div>
-        <AppHeader />
+        <!--<AppHeader />-->
         <elec-view />
-        <AppFooter />
+        <!--<AppFooter />-->
     </div>
 </template>
     

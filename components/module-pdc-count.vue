@@ -6,7 +6,7 @@
     </div>
     <div class="count">{{ numberWithSpaces(countDatas) || '&nbsp;' }}</div>
     <div v-if="currCatVehic === 'gaz'" class="type" v-html="'stations GNV<br>publiques au total'"></div>
-    <div v-else class="type" v-html="'points de charge<br>publiques au total'"></div>
+    <div v-else class="type" v-html="'points de charge <br>publiques au total'"></div>
     <div class="date">{{infos['pdc' + currCatVehic]}}</div>
     <div class="source">source : {{currCatVehic === 'elec' ? 'GIREVE' : 'AFGNV'}}</div>
   </div>

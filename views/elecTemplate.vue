@@ -62,10 +62,10 @@
           <span v-else-if="currCatVehic === 'gaz'">Véhicules particuliers au gaz naturel</span>
           <span v-else>Véhicules électriques et hybrides rechargeables</span>
         </div>
-        <div v-if="current_territoire" class="page-header-territoire-title mobile-only">
+        <!--<div v-if="current_territoire" class="page-header-territoire-title mobile-only">
           {{ current_territoire.label }}
-        </div>
-        <div class="page-header-selectors" :class="{ 'no-mobile': $route.name === 'index' }">
+        </div>-->
+        <div class="page-header-selectors" :class="{ 'no-mobileV2': $route.name === 'index' }">
           <div class="location-selector-box">
             <box-select-page-head class="selector-electric" :reduced="$route.name !== 'index'" :cat-vehic="'elec'"></box-select-page-head>
           </div>
@@ -79,7 +79,7 @@
             <module-pdc-count :count-datas="pdcCountDatas"></module-pdc-count>
           </div>
         </div>
-        <div v-if="$route.name === 'index'" class="page-header-selectors mobile-only"
+        <!--<div v-if="$route.name === 'index'" class="page-header-selectors mobile-onlyV2"
           :data-carrousel-index="carrouselIndex">
           <div class="selector-mobile-wrapper" v-touch:start="startHandler" v-touch:end="endHandler"
             v-touch:swipe.left="swipeHandlerLeft" v-touch:swipe.right="swipeHandlerRight">
@@ -97,15 +97,15 @@
             </div>
           </div>
         </div>
-        <div v-if="($route.name === 'index') && !$store.state.versionEnedis" class="carrousel-controls mobile-only flex">
+        <div v-if="($route.name === 'index') && !$store.state.versionEnedis" class="carrousel-controls mobile-onlyV2 flex">
           <div class="carrousel-controls-item" :class="{ current: carrouselIndex === 0 }" @click="carrouselIndex = 0">
           </div>
           <div class="carrousel-controls-item" :class="{ current: carrouselIndex === 1 }" @click="carrouselIndex = 1">
           </div>
-        </div>
+        </div>-->
       </div>
     </div>
-    <div class="page-content" :data-loading-state="loadingState">
+    <div class="page-content" :data-loading-state="loadingState" style="background-color: white;">
       <div v-if="current_type_territoire.id === 'epci' && current_territoire" class="header-epci"
         :data-cat="current_epci_category.id">
         <div class="header-epci-switch-wrapper">
@@ -270,7 +270,14 @@
       <span v-if="!mobileLocationSelectExpanded" v-html="require(`~/assets/_svg/arrow-list.svg?raw`)" />
       <span v-else v-html="require(`~/assets/_svg/bt-arrow-up.svg?raw`)" />
     </div>
+
+    <div v-if="current_territoire">
+
+      <AppFooter />
+
+    </div>
   </div>
+  
 </template>
 <script>
 import * as _ from 'lodash'
@@ -279,6 +286,7 @@ import { scrollTo } from 'vue-scrollto'
 import { mapGetters } from 'vuex'
 import * as UTILS from '~/commons/utils/index.js'
 import { getODSRequest } from '~/api/config'
+import AppFooter from '~/components/app-footer.vue'
 let html2canvas
 if (process.browser) {
   html2canvas = require('html2canvas')
@@ -672,14 +680,17 @@ export default {
             return {
               ...fEntry,
               ...territoireObject,
-              sum_pdc: _.sumBy(_.uniqBy(processedEPCI, 'code_epci'), function (fEpci) {
+              sum_pdcV0: _.sumBy(_.uniqBy(processedEPCI, 'code_epci'), function (fEpci) {
                 return fEpci.pdc_epci
               }),
+              sum_pdc: _self.current_type_territoire.id === 'regions' && _self.inLocationDatas ? _self.inLocationDatas[0].pdc_reg : (_self.current_type_territoire.id === 'departements' && _self.inLocationDatas ? _self.inLocationDatas[0].pdc_dep : (_self.current_type_territoire.id === 'epci' && _self.inLocationDatas ? _self.inLocationDatas[0].pdc_epci : 0)),
+             
             }
           })
         })
 
       this.locationDatas = graphDatas
+
 
     },
     mobileLocationSelectExpandToggle() {
@@ -798,31 +809,115 @@ export default {
 @import '~assets/scss/_variables.scss';
 @import '~assets/scss/_browsers.scss';
 
-@media screen and (max-width: 639px) {
+// Media queries pour les écrans avec une largeur max de 1 000 pixels
+@media screen and (max-width: 1000px) {
   .page .page-header .page-header-selectors {
-    width: calc(200vw + 80px);
+    //width: calc(200vw + 10px);
+  }
+
+  .page-header-selectors {
+    flex-direction: column;
+    align-items: center; // Centrer horizontalement les éléments enfants
+    justify-content: center;
+  }
+
+  .location-selector-box {
+    order: 1;
+    display: flex;
+    justify-content: center; // Centrer horizontalement le contenu de location-selector-box
+    width: 100%; // Assurer que chaque location-selector-box prend 100% de largeur de son parent
+    box-sizing: border-box; // Inclure le padding et la border dans la largeur totale de l'élément
+  }
+
+  .elec-data-box {
+    order: 2;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap; // Permettre le retour des cartes à la ligne si nécessaire
+    width: 100%; // Assurer que chaque elec-data-box prend 100% de largeur de son parent
+    box-sizing: border-box; // Inclure le padding et la border dans la largeur totale de l'élément
+  
+    .card {
+      flex: 1 1 40%; // Ajuster la largeur des cartes
+      margin: 5px; // Espacement entre les cartes
+    }
+  }
+
+  .mobile-only, 
+  .flex.mobile-only {
+    display: flex !important;
   }
 }
 
+// Stylisation de la page
+/*.page {
+  height: 100vh; 
+  align-items: center;
+  justify-content: center;
+  background: $header-gradient;
+  padding-bottom: 20%;
 
+  --primary-100: #ec81a6;
+  --header-gradient: linear-gradient(180deg, #ec81a6, #141446);
+  --mobility-100: #ec81a6;
+  --secondary-F-25: #fabbae;
+}*/
+
+.page {
+  //display: flex; 
+  flex-direction: column; 
+  min-height: 100vh; /* Assurez-vous que la page occupe au moins 100% de la hauteur de la fenêtre */
+  align-items: center;
+  justify-content: center;
+  background: $header-gradient;
+  /* padding-bottom: 20%; Supprimé si vous souhaitez que la page occupe toute la hauteur */
+
+  --primary-100: #ec81a6;
+  --header-gradient: linear-gradient(180deg, #ec81a6, #141446);
+  --mobility-100: #ec81a6;
+  --secondary-F-25: #fabbae;
+}
+
+.page-content {
+  flex: 1; /* Permet à .page-content d'occuper tout l'espace disponible verticalement */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centrer le contenu verticalement */
+  width: 100%; /* Assurer que le contenu prend toute la largeur */
+}
+
+// Stylisation de la page-header-selectors
+.page-header-selectors {
+  @include transition((transform), 0.3s, ease-out);
+  transform: translateX(0px);
+  display: flex;
+  flex-direction: column;
+  align-items: center; // Centre horizontalement les éléments enfants
+  justify-content: center;
+}
+
+// Stylisation de location-selector-box
 .location-selector-box {
   display: flex;
   flex-basis: 480px;
+  justify-content: center; // Centre horizontalement le contenu de location-selector-box
 }
 
+// Stylisation de la page-header-wrapper
 .page-header-wrapper {
   position: relative;
   z-index: 2;
 }
 
+// Stylisation de la page-header
 .page-header {
-  position: relative;
-  background-color: $primary-100;
   padding-top: 55px;
   color: $white;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 16px 20px rgb(144 149 162 / 30%);
 
   .page-header-wrapper {
     justify-content: flex-end;
@@ -833,13 +928,10 @@ export default {
 
   &:before {
     content: '';
-    position: absolute;
     top: 100px;
     bottom: 0px;
     left: 0px;
     right: 0px;
-    background: $header-gradient;
-    z-index: 1;
   }
 
   .page-header-subtitle {
@@ -847,8 +939,6 @@ export default {
     font-weight: 400;
     font-size: 16px;
     line-height: 22px;
-    /* identical to box height */
-
     text-align: center;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -862,8 +952,6 @@ export default {
     font-weight: 800;
     font-size: 32px;
     line-height: 44px;
-    /* identical to box height */
-
     text-align: center;
     letter-spacing: -0.02em;
   }
@@ -872,7 +960,6 @@ export default {
     font-weight: 400;
     font-size: 14px;
     line-height: 19px;
-    /* identical to box height */
     margin-top: 8px;
     text-align: center;
     text-transform: uppercase;
@@ -889,6 +976,12 @@ export default {
     padding: 0px;
     gap: 20px;
     position: relative;
+
+    @media screen and (max-width: 1000px) {
+      flex-direction: column;
+      align-items: center;
+      width: 100%; // Assurer que le parent prend 100% de largeur
+    }
   }
 
   .elec-data-box {
@@ -901,6 +994,7 @@ export default {
   }
 }
 
+// Stylisation de la page-content
 .page-content {
   margin-top: 40px;
   color: $primary-B-100;
@@ -928,6 +1022,7 @@ export default {
   }
 }
 
+// Stylisation des sections
 .section-title {
   position: relative;
   display: flex;
@@ -958,7 +1053,6 @@ export default {
     text-align: center;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-
     padding: 0px 8px;
   }
 }
@@ -998,7 +1092,6 @@ export default {
 
     ::v-deep .mobile-classement,
     ::v-deep .graph {
-
       .gradient-top,
       .gradient-bottom,
       .classement-item,
@@ -1027,7 +1120,6 @@ export default {
       &:after {
         position: absolute;
         white-space: pre;
-        /* or pre-wrap */
         content: "Indicateurs non représentatifs pour cette sélection. \A Le graphique est non disponible.";
         padding-top: 50px;
         box-sizing: border-box;
@@ -1043,13 +1135,8 @@ export default {
         font-weight: 600;
         font-size: 16px;
         line-height: 140%;
-        /* or 22px */
-
         text-align: center;
         letter-spacing: 0.1em;
-
-        /* primary-B-100 */
-
         color: $primary-B-100;
       }
     }
@@ -1272,7 +1359,6 @@ export default {
       &:last-child {
         border-radius: 0px 20px 20px 0px;
         border-width: 6px 6px 6px 0px;
-        // border-color: $white;
       }
 
       &.current {
@@ -1324,8 +1410,6 @@ export default {
         font-weight: 800;
         font-size: 16px;
         line-height: 22px;
-        /* identical to box height */
-
         letter-spacing: -0.02em;
       }
 
@@ -1425,13 +1509,6 @@ export default {
   align-items: center;
   justify-content: center;
   margin-top: 40px;
-}
-
-.location-selector-box {
-  //padding: 0 40px;
-  width: 100%;
-  //flex-basis: 100%;
-  max-width: none;
 }
 
 .statut-sticky {
@@ -1589,10 +1666,15 @@ export default {
   opacity: 0;
 }
 
-@media screen and (max-width: 1279px) {
+@media screen and (max-width: 1000px) {
   .section-title {
     margin: auto;
     max-width: 560px;
+  }
+
+  .location-selector-box {
+    padding: 0px 0px 0px 0px;
+    flex-basis: 380px;
   }
 
   .section-legend {
@@ -1837,7 +1919,7 @@ export default {
   }
 }
 
-@media screen and (max-width: 639px) {
+@media screen and (max-width: 1px) {
   .page-header {
     z-index: 10;
 
@@ -2097,7 +2179,6 @@ export default {
 }
 
 
-//////////////////////: ANDRE ///////////////////
 .page-header-selectors {
   &.mobile-only {
     display: block;
@@ -2133,3 +2214,4 @@ export default {
   }
 }
 </style>
+

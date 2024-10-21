@@ -52,8 +52,8 @@
       <div class="logos-right no-mobile">
         <div class="logo-wdd">
           <a href="https://wedodata.fr/" target="_blank">
-            <span v-html="require(`~/assets/_svg/logo-wedodata.svg?raw`)" />
-          <!--<img src="~/assets/_svg/logoomnilink2.png" alt="Logo Omnilink" />-->
+            <!--<span v-html="require(`~/assets/_svg/logo-wedodata.svg?raw`)" />
+          <img src="~/assets/_svg/logoomnilink2.png" alt="Logo Omnilink" />-->
           </a>
         </div>
       </div>
@@ -143,6 +143,7 @@ export default {
   --mobility-100: #ec81a6;
   --secondary-F-25: #fabbae;
 }
+
 .card {
   display: flex;
   align-items: center;

@@ -90,11 +90,8 @@
                   >électriques et hybrides rechargeables</span></span>
               </span>
               <span v-else>
-                <span class="result"
-                  >{{ graphDatas.CurrValueText }} <span v-if="currCatVehic === 'gaz'">véhicules au gaz</span
-                ><span v-else
-                  >véhicules électriques et hybrides rechargeables</span></span
-                >
+                <span class="result">{{ graphDatas.CurrValueText }} <span v-if="currCatVehic === 'gaz'">véhicules au gaz</span
+                ><span v-else>véhicules électriques et hybrides rechargeables</span></span>
                 par <span v-if="currCatVehic === 'gaz'">station GNV</span
                 ><span v-else
                   >point de charge</span
@@ -102,7 +99,7 @@
                 ><span v-else
                   >points de charge</span> pour {{graphDatas.currValueNb}} <span v-if="currCatVehic === 'gaz'">véhicules au gaz</span
                 ><span v-else
-                  >véhicules électriques et hybrides rechargeables</span></span>
+                  >véhicules électriques et hybrides rechargeables ANDRE2</span></span>
               </span>
             </div>
           </div>
@@ -349,7 +346,7 @@ export default {
       })
       return region
     },
-    graphDatas(){
+    graphDatas(){      
       const _self = this
       if (!this.locationDatas) return null
       let processedDatas = this.locationDatas
@@ -428,6 +425,7 @@ export default {
           }
         } else if (_self.cat === 'vehic') {
           if (_self.currCatVehic === 'gaz') {
+            
             returnedObj.y = fEntry.c_total_autre ? parseFloat(
               ((fEntry.c_total_gnv / fEntry.c_total_autre) * 100).toFixed(2)
             ) : 0

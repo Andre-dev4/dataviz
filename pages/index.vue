@@ -22,11 +22,12 @@ console.log("TOTO")
     }
 </script>-->
 
+
 <template>
-  <div class="page">
-      <!---<AppHeader />-->
+  <div id="app" class="page-container">
+    <div class="page">
       <elec-view />
-      <AppFooter />
+    </div>
   </div>
 </template>
   
@@ -47,12 +48,23 @@ console.log("TOTO")
 <style lang="scss">
 @import '~assets/scss/_variables.scss';
 @import '~assets/scss/_browsers.scss';
-.page {
 
---primary-100: #ec81a6;
---header-gradient: linear-gradient(180deg, #ec81a6, #141446);
---mobility-100: #ec81a6;
---secondary-F-25: #fabbae;
+.page-containerV {
+    //height: 100vh; /* Hauteur de la fenêtre visible */
+    //display: flex;
+    align-items: center;
+    justify-content: center;
 
-}
+  background: $header-gradient;
+
+  --primary-100: #ec81a6;
+  --header-gradient: linear-gradient(180deg, #ec81a6, #141446);
+  --mobility-100: #ec81a6;
+  --secondary-F-25: #fabbae;
+  }
+
+  .pageV {
+    width: 100%;
+    //height: 100%;
+  }
 </style>

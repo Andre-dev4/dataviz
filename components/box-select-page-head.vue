@@ -43,7 +43,7 @@
     ></selector-select-location>
     <div class="selector-legend">
       <span v-if="catVehic === 'elec' && currCatVehic !== 'gaz'"
-        >*Établissement public de coopération intercommunale ANDRE</span
+        >*Établissement public de coopération intercommunale</span
       >
       <span v-else>*Données disponibles uniquement au niveau régional</span>
     </div>
@@ -161,6 +161,7 @@ export default {
     width: calc(200vw + 10px);
 }
 
+
 .selector-box {
   position: relative;
   display: flex;
@@ -273,7 +274,7 @@ export default {
     color: $primary-B-50;
   }
 }
-@media screen and (max-width: 1279px) {
+@media screen and (max-width: 1000px) {
   .selector-box {
     .selector {
       &.list {
