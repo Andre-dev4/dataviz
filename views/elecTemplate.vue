@@ -1,5 +1,5 @@
 <template>
-  <div class="page">
+  <div class="page" :style="{ backgroundColor: current_territoire ? 'white' : '#141446' }">
     <div class="statut-sticky" :class="{ isOn: stickyStatut }">
       <div class="statut-title">
         <span class="title-label"> statut des territoires </span>
@@ -105,11 +105,11 @@
         </div>-->
       </div>
     </div>
-    <div class="page-content" :data-loading-state="loadingState" style="background-color: white;">
+    <div v-if="current_territoire" class="page-content" :data-loading-state="loadingState">
       <div v-if="current_type_territoire.id === 'epci' && current_territoire" class="header-epci"
         :data-cat="current_epci_category.id">
         <div class="header-epci-switch-wrapper">
-          <div class="header-epci-text">
+          <div class="header-epci-text" style="color: white;">
             Vous pouvez comparer cet EPCI aux autres EPCI de même…
           </div>
           <div class="header-epci-switcher">
@@ -408,6 +408,7 @@ export default {
       return ((this.current_type_vehicule.slug !== 'tous-type') && (this.current_type_vehicule.slug !== 'particuliers'))
     },
     currCatVehic() {
+      
       return this.$route.name.indexOf('gaz') === 0 ? 'gaz' : 'elec'
     },
     current_territoire() {
@@ -614,15 +615,12 @@ export default {
 
                 return fTerritory.label === fEntry.x
             })
-            
-            if(!territoireObject){
 
-              //console.log('territoireObject', territoireObject, fEntry.x)
-            }
+            console.log('territoireObject', territoireObject, fEntry.x)
               
             let processedEPCI;
 
-            if(territoireObject.type === 'epci'){
+            if(territoireObject && territoireObject.type === 'epci'){
 
               processedEPCI = _.filter(_self.epci, function (fEpci) {
 
@@ -643,11 +641,11 @@ export default {
 
               processedEPCI = _.filter(_self.communes, function (fCommune) {
 
-                if (territoireObject.type === 'reg') {
+                if (territoireObject && territoireObject.type === 'reg') {
 
                   return fCommune.code_reg === territoireObject.code
 
-                } else if (territoireObject.type === 'dpt') {
+                } else if (territoireObject && territoireObject.type === 'dpt') {
 
                   return fCommune.code_dpt === territoireObject.code
 
@@ -660,7 +658,7 @@ export default {
 
 
             // let processedEPCI = filteredEpciByComm
-            if(territoireObject.type === 'epci' && _self.current_epci_category.id === 'classe'){
+            if(territoireObject && territoireObject.type === 'epci' && _self.current_epci_category.id === 'classe'){
 
               processedEPCI = _.uniqBy(processedEPCI, 'code_epci')
             }
@@ -872,13 +870,8 @@ export default {
   min-height: 100vh; /* Assurez-vous que la page occupe au moins 100% de la hauteur de la fenêtre */
   align-items: center;
   justify-content: center;
-  background: $header-gradient;
-  /* padding-bottom: 20%; Supprimé si vous souhaitez que la page occupe toute la hauteur */
-
-  --primary-100: #ec81a6;
-  --header-gradient: linear-gradient(180deg, #ec81a6, #141446);
-  --mobility-100: #ec81a6;
-  --secondary-F-25: #fabbae;
+  //background-color: #141446;
+  
 }
 
 .page-content {
@@ -889,6 +882,12 @@ export default {
   width: 100%; /* Assurer que le contenu prend toute la largeur */
 }
 
+.page-header{
+
+  background: $header-gradient;
+  height: 100%;
+}
+
 // Stylisation de la page-header-selectors
 .page-header-selectors {
   @include transition((transform), 0.3s, ease-out);
@@ -897,6 +896,9 @@ export default {
   flex-direction: column;
   align-items: center; // Centre horizontalement les éléments enfants
   justify-content: center;
+  height: 100%;
+  
+  //background: $header-gradient;
 }
 
 // Stylisation de location-selector-box
@@ -980,7 +982,7 @@ export default {
     @media screen and (max-width: 1000px) {
       flex-direction: column;
       align-items: center;
-      width: 100%; // Assurer que le parent prend 100% de largeur
+      height: 100%; // Assurer que le parent prend 100% de largeur
     }
   }
 
@@ -2009,7 +2011,7 @@ export default {
           max-width: 280px;
 
           .header-epci-switcher-item {
-            flex-basis: 50%;
+            //flex-basis: 50%;
 
             &:first-child {
               text-align: right;

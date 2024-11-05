@@ -67,8 +67,8 @@
             }"
             @click="selectItem(item)"
           >
-            <div class="label">{{ item.label }}</div>
-            <div class="ico">
+            <div v-if="item.label !== '0'" class="label">{{ item.label }}</div>
+            <div v-if="item.label !== '0'" class="ico">
               <arrowList />
             </div>
           </div>

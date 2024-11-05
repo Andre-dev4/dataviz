@@ -99,7 +99,7 @@
                 ><span v-else
                   >points de charge</span> pour {{graphDatas.currValueNb}} <span v-if="currCatVehic === 'gaz'">véhicules au gaz</span
                 ><span v-else
-                  >véhicules électriques et hybrides rechargeables ANDRE2</span></span>
+                  >véhicules électriques et hybrides rechargeables</span></span>
               </span>
             </div>
           </div>

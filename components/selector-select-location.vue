@@ -27,7 +27,7 @@
       </div>
       <div v-if="vBarEnabled" v-bar="{ preventParentScroll: true }" class="select-list-wrapper vb">
         <div class="select-list">
-          <div v-for="(item, itemIndex) in filteredItems" :key="'item-' + itemIndex" class="select-item" :class="{
+          <div v-if="(item.label !== '0')" v-for="(item, itemIndex) in filteredItems" :key="'item-' + itemIndex" class="select-item" :class="{
             current:
               (internalTerritoire &&
                 internalTerritoire.code &&
